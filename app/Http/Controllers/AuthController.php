@@ -29,7 +29,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return view('contents.dashboard')->with('success', 'Login successful!');
+        return redirect()->route('dashboard')->with('success', 'Login successful!');
 
         // if (Auth::user()->position == 'admin') {
         //     return redirect()->route('users')->with('success', 'Login successful!');
