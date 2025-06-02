@@ -9,17 +9,15 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
-});                 
-
-
-Route::get('dashboard', [AppController::class,'show'])->name('dashboard');
+});
 
 Route::get('login', [AuthController::class, 'show'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('users', [UserController::class, 'show'])->name('users');
-
-Route::get('drivers', [DriverController::class, 'show'])->name('drivers');
-
-Route::get('tricycles', [TricycleController::class, 'show'])->name('tricycles');
+Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', [AppController::class,'show'])->name('dashboard');
+    Route::get('users', [UserController::class, 'show'])->name('users');
+    Route::get('drivers', [DriverController::class, 'show'])->name('drivers');
+    Route::get('tricycles', [TricycleController::class, 'show'])->name('tricycles');
+});
