@@ -25,9 +25,4 @@ class Driver extends Model
     {
         return $this->hasMany(Tricycle::class, 'driver_id', 'driver_id');
     }
-
-    public function coordinates()
-    {
-        return $this->hasMany(DriverCoordinate::class, 'driver_id', 'driver_id');
-    }
 }

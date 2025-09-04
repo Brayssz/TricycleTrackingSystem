@@ -12,7 +12,7 @@ class TricycleManagement extends Component
 
     public $tricycle;
 
-    public $tricycle_id, $plate_number, $motorcycle_model, $color, $driver_id, $status;
+    public $tricycle_id, $plate_number, $motorcycle_model, $color, $driver_id, $status, $device_id;
 
     public function getTricycle($tricycleId)
     {
@@ -25,6 +25,7 @@ class TricycleManagement extends Component
             $this->color = $this->tricycle->color;
             $this->driver_id = $this->tricycle->driver_id;
             $this->status = $this->tricycle->status;
+            $this->device_id = $this->tricycle->device_id;
         } else {
             session()->flash('error', 'Tricycle not found.');
         }
@@ -43,6 +44,7 @@ class TricycleManagement extends Component
             'color' => 'required|string|max:255',
             'driver_id' => 'nullable|integer|exists:drivers,driver_id',
             'status' => 'nullable|string|max:255',
+            'device_id' => 'nullable|string|max:255',
         ];
     }
 
@@ -54,7 +56,7 @@ class TricycleManagement extends Component
     public function resetFields()
     {
         $this->reset([
-            'plate_number', 'motorcycle_model', 'color', 'driver_id', 'status'
+            'plate_number', 'motorcycle_model', 'color', 'driver_id', 'status', 'device_id'
         ]);
     }
 
@@ -69,6 +71,7 @@ class TricycleManagement extends Component
                 'color' => $this->color,
                 'driver_id' => $this->driver_id,
                 'status' => $this->status ?? 'active',
+                'device_id' => $this->device_id,
             ]);
 
             session()->flash('message', 'Tricycle successfully created.');
@@ -78,6 +81,7 @@ class TricycleManagement extends Component
             $this->tricycle->color = $this->color;
             $this->tricycle->driver_id = $this->driver_id;
             $this->tricycle->status = $this->status;
+            $this->tricycle->device_id = $this->device_id;
 
             $this->tricycle->save();
 

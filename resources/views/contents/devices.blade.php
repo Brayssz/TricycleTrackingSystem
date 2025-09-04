@@ -1,6 +1,6 @@
 @extends('layouts.app-layout')
 
-@section('title', 'Tricycle Management')
+@section('title', 'Device Management')
 
 @section('content')
 
@@ -8,8 +8,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Tricycle</h4>
-                    <h6>Manage your tricycles</h6>
+                    <h4>Device</h4>
+                    <h6>Manage your devices</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -23,11 +23,11 @@
                 </li>
             </ul>
             <div class="page-btn">
-                <a class="btn btn-added add-tricycle"><i data-feather="plus-circle" class="me-2"></i>Add New
-                    Tricycle</a>
+                <a class="btn btn-added add-device"><i data-feather="plus-circle" class="me-2"></i>Add New
+                    Device</a>
             </div>
         </div>
-        <!-- /tricycle list -->
+        <!-- /device list -->
         <div class="card table-list-card">
             <div class="card-body pb-0">
                 <div class="table-top table-top-two table-top-new d-flex ">
@@ -54,14 +54,11 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table tricycle-table pb-3">
+                    <table class="table device-table pb-3">
                         <thead>
                             <tr>
-                                <th>Plate Number</th>
-                                <th>Model</th>
-                                <th>Color</th>
-                                <th>Assigned Driver</th>
-                                <th>Assigned Device</th>
+                                <th>Name</th>
+                                <th>Identifier</th>
                                 <th>Status</th>
                                 <th class="no-sort">Action</th>
                             </tr>
@@ -76,7 +73,7 @@
             </div>
         </div>
     </div>
-    @livewire('contents.tricycle-management')
+    @livewire('contents.device-management')
 
 @endsection
 
@@ -91,8 +88,8 @@
                 });
             @endif
 
-            if ($('.tricycle-table').length > 0) {
-                var table = $('.tricycle-table').DataTable({
+            if ($('.device-table').length > 0) {
+                var table = $('.device-table').DataTable({
                     "processing": true,
                     "serverSide": true,
                     "bFilter": true,
@@ -109,7 +106,7 @@
                         info: "_START_ - _END_ of _TOTAL_ items",
                     },
                     "ajax": {
-                        "url": "/tricycles",
+                        "url": "/devices",
                         "type": "GET",
                         "headers": {
                             "Accept": "application/json"
@@ -119,33 +116,57 @@
                         },
                         "dataSrc": "data"
                     },
-                    "columns": [{
-                            "data": "plate_number"
-                        },
+                    "columns": [
                         {
-                            "data": "motorcycle_model"
-                        },
-                        {
-                            "data": "color"
-                        },
-                        {
-                            "data": "driver",
+                            "data": "device_name",
                             "render": function(data, type, row) {
-                                if (data && data.name) {
-                                    return `<a href="javascript:void(0);">${data.name}</a>`;
-                                }
-                                return '<span class="text-muted">Unassigned</span>';
+                                const colors = {
+                                    A: 'bg-primary',
+                                    B: 'bg-success',
+                                    C: 'bg-info',
+                                    D: 'bg-warning',
+                                    E: 'bg-danger',
+                                    F: 'bg-secondary',
+                                    G: 'bg-dark',
+                                    H: 'bg-light',
+                                    I: 'bg-primary',
+                                    J: 'bg-success',
+                                    K: 'bg-info',
+                                    L: 'bg-warning',
+                                    M: 'bg-danger',
+                                    N: 'bg-secondary',
+                                    O: 'bg-dark',
+                                    P: 'bg-light',
+                                    Q: 'bg-primary',
+                                    R: 'bg-success',
+                                    S: 'bg-info',
+                                    T: 'bg-warning',
+                                    U: 'bg-danger',
+                                    V: 'bg-secondary',
+                                    W: 'bg-dark',
+                                    X: 'bg-light',
+                                    Y: 'bg-primary',
+                                    Z: 'bg-success'
+                                };
+
+                                const firstLetter = data ? data.charAt(0).toUpperCase() : 'A';
+                                const bgColor = colors[firstLetter] || 'bg-secondary';
+
+                                return `
+                                        <div class="userimgname">
+                                            <a href="javascript:void(0);" class="product-img">
+                                                <span class="avatar ${bgColor} avatar-rounded">
+                                                    <span class="avatar-title">${firstLetter}</span>
+                                                </span>
+                                            </a>
+                                            <div>
+                                                <a href="javascript:void(0);">${data}</a>
+                                            </div>
+                                        </div>
+                                    `;
                             }
                         },
-                        {
-                            "data": "device",
-                            "render": function(data, type, row) {
-                                if (data && data.device_name) {
-                                    return `<a href="javascript:void(0);">${data.device_name}</a>`;
-                                }
-                                return '<span class="text-muted">Unassigned</span>';
-                            }
-                        },
+                        { "data": "device_identifier" },
                         {
                             "data": "status",
                             "render": function(data, type, row) {
@@ -159,7 +180,7 @@
                             "render": function(data, type, row) {
                                 return `
                                     <div class="edit-delete-action">
-                                        <a class="me-2 p-2 edit-tricycle" data-tricycleid="${row.tricycle_id}">
+                                        <a class="me-2 p-2 edit-device" data-deviceid="${row.device_id}">
                                             <i data-feather="edit" class="feather-edit"></i>
                                         </a>
                                     </div>
@@ -168,7 +189,7 @@
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(6).addClass('action-table-data');
+                        $(row).find('td').eq(3).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');
@@ -180,8 +201,8 @@
                             table.draw();
                         });
 
-                        tippy('.edit-tricycle', {
-                            content: "Edit Tricycle",
+                        tippy('.edit-device', {
+                            content: "Edit Device",
                         });
                     },
                     "drawCallback": function(settings) {

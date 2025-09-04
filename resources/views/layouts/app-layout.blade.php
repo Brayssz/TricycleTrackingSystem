@@ -38,6 +38,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
 
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
     {{-- @livewireStyles<!-- Styles - --}}
@@ -198,12 +200,15 @@
                                         <a href="/tricycles"><i
                                                 data-feather="briefcase"></i><span>Tricycles</span></a>
                                     </li>
-                                    
+                                    <li class="{{ Request::is('devices') ? 'active' : '' }}">
+                                        <a href="/devices"><i data-feather="cpu"></i><span>Devices</span></a>
+                                    </li>
+
                                 </ul>
                             </li>
                         @endif
 
-                     
+
 
                     </ul>
                 </div>
@@ -291,6 +296,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
 
     @vite(['resources/assets/js/script.js', 'resources/assets/js/custom-select2.js', 'resources/assets/js/mask.js', 'resources/assets/js/theme-script.js', 'resources/assets/js/mask.js'])

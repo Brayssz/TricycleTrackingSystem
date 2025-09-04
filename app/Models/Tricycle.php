@@ -16,11 +16,17 @@ class Tricycle extends Model
         'motorcycle_model',
         'color',
         'driver_id',
+        'device_id',
         'status',
     ];
 
     public function driver()
     {
         return $this->belongsTo(Driver::class, 'driver_id', 'driver_id');
+    }
+
+    public function device()
+    {
+        return $this->belongsTo(Device::class, 'device_id', 'device_id');
     }
 }

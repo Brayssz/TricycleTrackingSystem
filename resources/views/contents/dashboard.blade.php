@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-
+    @livewire('tracking.location-tracker')
     <div class="content">
         <div class="row">
             <div class="col-xl-4 col-sm-6 col-12 d-flex">
@@ -59,7 +59,7 @@
                         <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1 mb-3">
                             <div class="col-lg-3 col-sm-12">
                                 <div class="form-group ">
-                                    <select class="select status_filter form-control">
+                                    <select class="select driver_filter form-control">
                                         <option value="">Filter by Driver</option>
                                         @php
                                             $active_drivers = \App\Models\Driver::where('status', 'active')->get();
@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-lg-3 col-sm-12">
                                 <div class="form-group ">
-                                    <select class="select status_filter form-control">
+                                    <select class="select tricycle_filter form-control">
                                         <option value="">Filter by Tricycle</option>
                                         @foreach($active_tricycles as $tricycle)
                                             <option value="{{ $tricycle->id }}">{{ $tricycle->plate_number }}</option>
@@ -92,16 +92,3 @@
 
     </div>
 @endsection
-@push('scripts')
-    
-    <script>
-        $(document).ready(function() {
-            // Koronadal City coordinates: 6.5004° N, 124.8467° E
-            var map = L.map('view_map').setView([6.5004, 124.8467], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-        });
-    </script>
-@endpush

@@ -34,33 +34,46 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('devices', function (Blueprint $table) {
+            $table->id('device_id');
+            $table->string('device_name');
+            $table->string('device_identifier')->unique();
+            $table->string('status')->default('active');
+            $table->timestamps();
+        });
+
         Schema::create('tricycles', function (Blueprint $table) {
             $table->id('tricycle_id');
             $table->string('plate_number')->unique();
             $table->string('motorcycle_model')->nullable();
             $table->string('color')->nullable();
             $table->unsignedBigInteger('driver_id')->nullable();
+            $table->unsignedBigInteger('device_id')->nullable();
             $table->string('status')->default('active');
-            $table->timestamps();
-
-            $table->foreign('driver_id')
-            ->references('driver_id')
-            ->on('drivers')
-            ->onDelete('set null');
-        });
-
-
-        Schema::create('driver_coordinates', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('driver_id');
-            $table->decimal('latitude', 10, 7);
-            $table->decimal('longitude', 10, 7);
-            $table->timestamp('recorded_at')->useCurrent();
             $table->timestamps();
 
             $table->foreign('driver_id')
                 ->references('driver_id')
                 ->on('drivers')
+                ->onDelete('set null');
+
+            $table->foreign('device_id')
+                ->references('device_id')
+                ->on('devices')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('device_coordinates', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('device_id');
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
+            $table->timestamp('recorded_at')->useCurrent();
+            $table->timestamps();
+
+            $table->foreign('device_id')
+                ->references('device_id')
+                ->on('devices')
                 ->onDelete('cascade');
         });
 

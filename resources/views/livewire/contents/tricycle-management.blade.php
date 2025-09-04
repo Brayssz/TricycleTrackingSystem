@@ -31,8 +31,9 @@
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="plate_number">Plate Number</label>
-                                                    <input type="text" class="form-control" placeholder="Enter plate number"
-                                                        id="plate_number" wire:model.lazy="plate_number">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter plate number" id="plate_number"
+                                                        wire:model.lazy="plate_number">
                                                     @error('plate_number')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
@@ -40,7 +41,8 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="motorcycle_model">Motorcycle Model</label>
+                                                    <label class="form-label" for="motorcycle_model">Motorcycle
+                                                        Model</label>
                                                     <input type="text" class="form-control" placeholder="Enter model"
                                                         id="motorcycle_model" wire:model.lazy="motorcycle_model">
                                                     @error('motorcycle_model')
@@ -62,14 +64,34 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="driver_id">Driver</label>
                                                     <div wire:ignore>
-                                                        <select class="select" id="driver_id" name="driver_id" wire:model="driver_id">
+                                                        <select class="select" id="driver_id" name="driver_id"
+                                                            wire:model="driver_id">
                                                             <option value="">Choose</option>
                                                             @foreach (\App\Models\Driver::all() as $driver)
-                                                                <option value="{{ $driver->driver_id }}">{{ $driver->name }}</option>
+                                                                <option value="{{ $driver->driver_id }}">
+                                                                    {{ $driver->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     @error('driver_id')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="device_id">Device</label>
+                                                    <div wire:ignore>
+                                                        <select class="select" id="device_id" name="device_id" wire:model="device_id">
+                                                            <option value="">Choose</option>
+                                                            @foreach (\App\Models\Device::where('status', 'active')->get() as $device)
+                                                                <option value="{{ $device->device_id }}">
+                                                                    {{ $device->device_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    @error('device_id')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
                                                 </div>
@@ -79,7 +101,8 @@
                                                     <div class="mb-3">
                                                         <label class="form-label" for="status">Status</label>
                                                         <div wire:ignore>
-                                                            <select class="select" id="status" name="status" wire:model="status">
+                                                            <select class="select" id="status" name="status"
+                                                                wire:model="status">
                                                                 <option value="">Choose</option>
                                                                 <option value="active">Active</option>
                                                                 <option value="inactive">Inactive</option>
@@ -96,7 +119,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer-btn mb-4 mt-0">
-                                <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-cancel me-2"
+                                    data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-submit">Submit</button>
                             </div>
                         </form>
@@ -117,6 +141,7 @@
                     width: '100%'
                 });
             }
+
             function handleTricycleActions() {
                 $(document).on('change', '[id]', handleInputChange);
                 $(document).on('click', '.add-tricycle', openAddTricycleModal);
@@ -128,7 +153,7 @@
                     const property = e.target.id;
                     const value = e.target.value;
                     @this.set(property, value);
-  
+
                 }
             }
 
