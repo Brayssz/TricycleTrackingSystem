@@ -16,7 +16,7 @@ class LocationController extends Controller
             'longitude' => 'required|numeric|between:-180,180',
         ]);
 
-        $device = Device::where('device_identifier', $request->query('device_identifier'))->first();
+        $device = Device::where('device_identifier', $request->device_identifier)->first();
 
         if (!$device) {
             return response()->json(['error' => 'Device not found.'], 404);
@@ -24,8 +24,8 @@ class LocationController extends Controller
 
         $coordinate = new DeviceCoordinate();
         $coordinate->device_id = $device->device_id;
-        $coordinate->latitude = $request->query('latitude');
-        $coordinate->longitude = $request->query('longitude');
+        $coordinate->latitude = $request->latitude;
+        $coordinate->longitude = $request->longitude;
         $coordinate->save();
 
         return response()->json(['message' => 'Location saved successfully.'], 201);
