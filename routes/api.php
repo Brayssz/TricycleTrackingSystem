@@ -8,4 +8,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/device/location', [LocationController::class, 'store'])->name('device.location.store');
+Route::post('/device/location', [LocationController::class, 'store']);
