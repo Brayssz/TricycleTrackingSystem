@@ -50,45 +50,42 @@
 
         <div class="row">
 
-            <div class="card flex-fill default-cover mb-4" >
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title mb-0">Tricycle Tracking</h4>
-                       
-                    </div>
-                    <div class="card-body">
-                        <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1 mb-3">
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select driver_filter form-control">
-                                        <option value="">Filter by Driver</option>
-                                        @php
-                                            $active_drivers = \App\Models\Driver::where('status', 'active')->get();
-                                            $active_tricycles = \App\Models\Tricycle::where('status', 'active')->get();
-                                        @endphp
+            <div class="card flex-fill default-cover mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Tricycle Tracking</h4>
 
-                                        @foreach($active_drivers as $driver)
-                                            <option value="{{ $driver->id }}">{{ $driver->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select tricycle_filter form-control">
-                                        <option value="">Filter by Tricycle</option>
-                                        @foreach($active_tricycles as $tricycle)
-                                            <option value="{{ $tricycle->id }}">{{ $tricycle->plate_number }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1 mb-3">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group ">
+                                <select class="select driver_filter form-control">
+                                    <option value="">Filter by Driver</option>
+                                    @php
+                                        $active_drivers = \App\Models\Driver::where('status', 'active')->get();
+                                        $active_tricycles = \App\Models\Tricycle::where('status', 'active')->get();
+                                    @endphp
+
+                                    @foreach ($active_drivers as $driver)
+                                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                        <div class="rounded-3" id="view_map" style="height: 700px;"></div>
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group ">
+                                <select class="select tricycle_filter form-control">
+                                    <option value="">Filter by Tricycle</option>
+                                    @foreach ($active_tricycles as $tricycle)
+                                        <option value="{{ $tricycle->id }}">{{ $tricycle->plate_number }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
+                    <div class="rounded-3" id="view_map" style="height: 700px;"></div>
                 </div>
-            
+            </div>
         </div>
-
-
     </div>
 @endsection

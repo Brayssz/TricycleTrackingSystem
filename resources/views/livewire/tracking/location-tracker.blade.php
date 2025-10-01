@@ -135,7 +135,31 @@
                     direction: 'top'
                 });
 
-                marker.bindPopup(`<b>Plate: ${tricycle.plate_number}</b><br>Driver: ${tricycle.driver_name ?? 'N/A'}`);
+                marker.bindPopup(`
+                    <div style="min-width:200px; font-family: 'Segoe UI', Arial, sans-serif; padding: 0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #007bff 60%, #3388ff 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px; margin-right: 12px;">
+                                ${tricycle.plate_number.split(' ').map(w => w[0]).join('')}
+                            </div>
+                            <div>
+                                <div style="font-size: 15px; font-weight: 600; color: #222;">
+                                    ${tricycle.plate_number}
+                                </div>
+                                <div style="font-size: 12px; color: #888;">
+                                    Plate Number
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <span style="font-weight: 500; color: #555;">Driver:</span>
+                            <span style="color: #222;">${tricycle.driver_name ?? 'N/A'}</span>
+                        </div>
+                        <div style="font-size: 12px; color: #888;">
+                            <span style="font-weight: 500;">Last Location Update:</span>
+                            <span>${tricycle.last_update ?? 'N/A'}</span>
+                        </div>
+                    </div>
+                `);
 
                 return marker;
             }

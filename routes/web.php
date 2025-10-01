@@ -23,4 +23,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('drivers', [DriverController::class, 'show'])->name('drivers');
     Route::get('tricycles', [TricycleController::class, 'show'])->name('tricycles');
     Route::get('devices', [DeviceController::class, 'show'])->name('devices');
+    Route::get('locations', [LocationController::class, 'tricyclesWithLatestUpdate']);
 });
