@@ -16,7 +16,7 @@ Route::get('/', function () {
 Route::get('login', [AuthController::class, 'show'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::post('device/location', [LocationController::class, 'store'])->name('device.location.store');
+Route::get('device/location', [LocationController::class, 'store'])->name('device.location.store');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [AppController::class,'show'])->name('dashboard');
