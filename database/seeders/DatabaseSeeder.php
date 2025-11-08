@@ -16,14 +16,14 @@ class DatabaseSeeder extends Seeder
     {
         $now = Carbon::now();
 
-        // // ----------- USERS -----------
-        // User::factory()->create([
-        //     'name' => 'John Doe',
-        //     'email' => 'test@mail.com',
-        //     'position' => 'admin',
-        //     'password' => bcrypt('password'), 
-        //     'status' => 'active',
-        // ]);
+        // ----------- USERS -----------
+        User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'test@mail.com',
+            'position' => 'admin',
+            'password' => bcrypt('password'), 
+            'status' => 'active',
+        ]);
 
         // ----------- DRIVERS -----------
         $drivers = [
