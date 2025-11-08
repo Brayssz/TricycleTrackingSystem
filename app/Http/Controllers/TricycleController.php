@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tricycle;
+use Illuminate\Support\Facades\DB;
 
 class TricycleController extends Controller
 {
@@ -20,8 +21,8 @@ class TricycleController extends Controller
                 $search = $request->input('search')['value'];
                 $query->where(function ($q) use ($search) {
                     $q->where('plate_number', 'like', '%' . $search . '%')
-                      ->orWhere('motorcycle_model', 'like', '%' . $search . '%')
-                      ->orWhere('color', 'like', '%' . $search . '%');
+                        ->orWhere('motorcycle_model', 'like', '%' . $search . '%')
+                        ->orWhere('color', 'like', '%' . $search . '%');
                 });
             }
 
@@ -50,4 +51,6 @@ class TricycleController extends Controller
 
         return view('contents.tricycles');
     }
+
+    
 }

@@ -82,6 +82,15 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="position-relative">
+                                <input type="text" id="exactdatetime" class="form-control pe-5 exactdatetime_filter"
+                                    placeholder="Select Date & Time" readonly>
+                                <i class="far fa-calendar position-absolute top-50 end-0 translate-middle-y pe-3"></i>
+                            </div>
+                        </div>
+                        <!-- Required JS/CSS for daterangepicker -->
+
                     </div>
                     <div class="rounded-3" id="view_map" style="height: 700px;"></div>
                 </div>
@@ -89,3 +98,68 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(function() {
+            function setDateTime(val) {
+                $('#exactdatetime').val(val ? val : '');
+            }
+
+            $('#exactdatetime').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                timePicker: true,
+                timePicker24Hour: true,
+                timePickerSeconds: true,
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD HH:mm:ss'
+                }
+            });
+
+            $('#exactdatetime').data('daterangepicker').container.hide();
+
+            let customBtns = `
+                <div class="daterangepicker-custom-btns" style="padding: 8px 12px;">
+                    <button type="button" class="btn btn-sm btn-primary me-2" id="set-current-datetime">Current Date & Time</button>
+                    <button type="button" class="btn btn-sm btn-secondary" id="set-custom-datetime">Custom</button>
+                </div>
+            `;
+
+            // Show custom buttons on input focus
+            $('#exactdatetime').on('focus', function() {
+                $('#exactdatetime').data('daterangepicker').show();
+            });
+
+            $('#exactdatetime').on('show.daterangepicker', function(ev, picker) {
+                // Hide calendar and timepicker by default
+                picker.container.find('.calendar-table').closest('.drp-calendar').hide();
+                picker.container.find('.timepicker').hide();
+
+                if (!$('.daterangepicker-custom-btns').length) {
+                    $('.daterangepicker').prepend(customBtns);
+
+                    $('#set-current-datetime').on('click', function() {
+                        setDateTime('Current');
+                        $('#exactdatetime').data('daterangepicker').hide();
+                    });
+
+                    $('#set-custom-datetime').on('click', function() {
+                        picker.container.find('.calendar-table').closest('.drp-calendar').show();
+                        picker.container.find('.timepicker').show();
+
+                        picker.container.find('.drp-calendar.right').hide();
+                    });
+                }
+            });
+
+            $('#exactdatetime').on('apply.daterangepicker', function(ev, picker) {
+                setDateTime(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+            });
+
+            $('#exactdatetime').on('cancel.daterangepicker', function(ev, picker) {
+                setDateTime('');
+            });
+        });
+    </script>
+@endpush

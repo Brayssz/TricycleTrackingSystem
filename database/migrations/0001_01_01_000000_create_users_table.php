@@ -37,6 +37,7 @@ return new class extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->id('device_id');
             $table->string('device_name');
+            $table->string('sim_number')->unique();
             $table->string('device_identifier')->unique();
             $table->string('status')->default('active');
             $table->timestamps();

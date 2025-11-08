@@ -39,7 +39,45 @@ class AuthController extends Controller
 
         // return redirect()->route('users')->with('success', 'Login successful!');
     }
+
+    public function mobilelogin(Request $request)
+    {
+        $user = User::where('email', $request->email)
+            ->where('status', 'active')
+            ->first();
+
+        // Check if user exists and password matches
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid credentials',
+                'data' => []
+            ], 401);
+        }
+
+        Auth::login($user);
+
+        $userData = [
+            'id' => (string) $user->id,
+            'name' => $user->name,
+            'status' => $user->status
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Login successful!',
+            'data' => [$userData] // list format to match List<T> in Android
+        ], 200);
+    }
+
     public function logout(Request $request)
+    {
+        Auth::logout();
+
+        return redirect()->route('login');
+    }
+
+    public function mobilelogout(Request $request)
     {
         Auth::logout();
 
