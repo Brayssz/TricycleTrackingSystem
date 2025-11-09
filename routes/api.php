@@ -11,4 +11,4 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'mobilelogin']);
 Route::get('/device/locations', [LocationController::class, 'getTricycleLocation']);
-Route::get('/device/location', [LocationController::class, 'store']);
+Route::post('/device/location', [LocationController::class, 'store']);
