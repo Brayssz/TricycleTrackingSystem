@@ -67,7 +67,7 @@
                                     @endphp
 
                                     @foreach ($active_drivers as $driver)
-                                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                        <option value="{{ $driver->driver_id }}">{{ $driver->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -77,18 +77,12 @@
                                 <select class="select tricycle_filter form-control">
                                     <option value="">Filter by Tricycle</option>
                                     @foreach ($active_tricycles as $tricycle)
-                                        <option value="{{ $tricycle->id }}">{{ $tricycle->plate_number }}</option>
+                                        <option value="{{ $tricycle->tricycle_id }}">{{ $tricycle->plate_number }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-sm-12">
-                            <div class="position-relative">
-                                <input type="text" id="exactdatetime" class="form-control pe-5 exactdatetime_filter"
-                                    placeholder="Select Date & Time" readonly>
-                                <i class="far fa-calendar position-absolute top-50 end-0 translate-middle-y pe-3"></i>
-                            </div>
-                        </div>
+                     
                         <!-- Required JS/CSS for daterangepicker -->
 
                     </div>

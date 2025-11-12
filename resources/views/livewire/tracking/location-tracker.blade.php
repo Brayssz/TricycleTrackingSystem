@@ -8,12 +8,48 @@
             $(document).ready(function() {
                 initializeSelect2();
 
-                setInterval(() => {
-                    getTricycleLocations();
-                }, 500);
+                // Store current filters
+                let currentDriverId = null;
+                let currentTricycleId = null;
+                let currentPlateSearch = "";
+
+                // Fetch locations periodically
+                // setInterval(() => {
+                //     getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch);
+                // }, 1000);
+                getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, false);
 
                 view_map = initMap();
+
+                // Driver filter
+                $('.driver_filter').on('change', function() {
+                    currentDriverId = $(this).val() || null; // convert empty string to null
+                    console.log('Driver filter changed:', currentDriverId);
+
+                    getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, true);
+                });
+
+                // Tricycle filter
+                $('.tricycle_filter').on('change', function() {
+                    currentTricycleId = $(this).val();
+                    console.log('Tricycle filter changed:', currentTricycleId);
+                    getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, true);
+                });
+
+                // Plate search
+                $('.search-plate').on('keyup', function() {
+                    currentPlateSearch = $(this).val();
+                    getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, true);
+                });
             });
+
+            function focusFirstMarker() {
+                console.log(markerData);
+                if (markerData.length > 0) {
+                    const firstTricycle = markerData[0];
+                    view_map.setView([firstTricycle.lat, firstTricycle.lng], 15);
+                }
+            }
 
             function initializeSelect2() {
                 $('.select2-department').select2({
@@ -26,80 +62,56 @@
                 });
             }
 
-            $('.driver_filter').on('change', function() {
-                const driverId = $(this).val();
-                getTricycleLocations(driverId, null);
-
-                if (markerData.length > 0) {
-                    const firstTricycle = markerData[0];
-                    view_map.setView([firstTricycle.lat, firstTricycle.lng], 15);
-                }
-            });
-
-            $('.tricycle_filter').on('change', function() {
-                const tricycleId = $(this).val();
-
-                getTricycleLocations(null, tricycleId);
-
-                if (markerData.length > 0) {
-                    const firstTricycle = markerData[0];
-                    view_map.setView([firstTricycle.lat, firstTricycle.lng], 15);
-                }
-            });
-
-            $('.search-plate').on('keyup', function() {
-                const searchValue = $(this).val();
-
-                if (searchValue.length > 0) {
-                    searchMarkerByPlate(searchValue);
-                }
-            });
-
-            function getTricycleLocations(driver_id = null, tricycle_id = null) {
+            function getTricycleLocations(driver_id = null, tricycle_id = null, plate_search = "", isfiltered = false) {
                 @this.call('getTricycleLocations', driver_id, tricycle_id).then(response => {
-                    updateMarkers(view_map, response);
+                    // Apply plate search filter on client-side if needed
+                    let filtered = response;
+                    if (plate_search && plate_search.trim().length > 0) {
+                        filtered = filtered.filter(tricycle =>
+                            tricycle.plate_number.toLowerCase().includes(plate_search.toLowerCase())
+                        );
+                    }
+
+                    updateMarkers(view_map, filtered, isfiltered);
                 });
             }
 
             function initMap() {
-                const view_map = L.map('view_map').setView([6.497396, 124.847160], 15);
+                const map = L.map('view_map').setView([6.497396, 124.847160], 15);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap contributors'
-                }).addTo(view_map);
+                }).addTo(map);
 
                 L.Control.geocoder({
                     defaultMarkGeocode: false
                 }).on('markgeocode', function(e) {
                     const latlng = e.geocode.center;
-                    view_map.setView(latlng, 11);
-                }).addTo(view_map);
+                    map.setView(latlng, 11);
+                }).addTo(map);
 
-                return view_map;
+                return map;
             }
 
-            function updateMarkers(view_map, tricycles = []) {
+            function updateMarkers(map, tricycles = [], isfiltered = false) {
+                console.log('Updating markers with data:', tricycles);
+                markerData = [];
                 markerData = tricycles;
 
-                // Clear existing circles
-                view_map.eachLayer(layer => {
-                    if (layer instanceof L.Circle) {
-                        view_map.removeLayer(layer);
-                    }
+                // Remove existing circles and markers
+                map.eachLayer(layer => {
+                    if (layer instanceof L.Circle) map.removeLayer(layer);
                 });
 
-                tricycles.forEach(tricycle => {
-                    const existingMarker = markers.find(marker => marker.tricycleId === tricycle.plate_number);
+                markers.forEach(m => map.removeLayer(m.marker));
+                markers = [];
 
-                    if (existingMarker) {
-                        animateMarker(existingMarker.marker, [tricycle.lat, tricycle.lng]);
-                    } else {
-                        const newMarker = createMarker(view_map, tricycle);
-                        markers.push({
-                            tricycleId: tricycle.plate_number,
-                            marker: newMarker
-                        });
-                    }
+                tricycles.forEach(tricycle => {
+                    const newMarker = createMarker(map, tricycle);
+                    markers.push({
+                        tricycleId: tricycle.plate_number,
+                        marker: newMarker
+                    });
 
                     const markerColor = tricycle.status === 'ontravel' ? 'red' : '#3388ff';
                     L.circle([tricycle.lat, tricycle.lng], {
@@ -108,11 +120,16 @@
                         opacity: 0.2,
                         fillOpacity: 0.2,
                         radius: 200
-                    }).addTo(view_map);
+                    }).addTo(map);
                 });
+
+                if(isfiltered) {
+                    focusFirstMarker();
+                }
+
             }
 
-            function createMarker(view_map, tricycle) {
+            function createMarker(map, tricycle) {
                 const initials = tricycle.plate_number.split(' ')
                     .map(word => word[0])
                     .join('');
@@ -128,7 +145,7 @@
 
                 const marker = L.marker([tricycle.lat, tricycle.lng], {
                     icon: icon
-                }).addTo(view_map);
+                }).addTo(map);
 
                 marker.bindTooltip(tricycle.plate_number, {
                     permanent: false,
@@ -139,7 +156,7 @@
                     <div style="min-width:200px; font-family: 'Segoe UI', Arial, sans-serif; padding: 0;">
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #007bff 60%, #3388ff 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px; margin-right: 12px;">
-                                ${tricycle.plate_number.split(' ').map(w => w[0]).join('')}
+                                ${initials}
                             </div>
                             <div>
                                 <div style="font-size: 15px; font-weight: 600; color: #222;">
@@ -162,42 +179,6 @@
                 `);
 
                 return marker;
-            }
-
-            function animateMarker(marker, newLatLng) {
-                const duration = 500;
-                const frames = 20;
-                const interval = duration / frames;
-
-                const startLatLng = marker.getLatLng();
-                const deltaLat = (newLatLng[0] - startLatLng.lat) / frames;
-                const deltaLng = (newLatLng[1] - startLatLng.lng) / frames;
-
-                let frame = 0;
-
-                const animation = setInterval(() => {
-                    if (frame < frames) {
-                        const lat = startLatLng.lat + deltaLat * frame;
-                        const lng = startLatLng.lng + deltaLng * frame;
-                        marker.setLatLng([lat, lng]);
-                        frame++;
-                    } else {
-                        clearInterval(animation);
-                        marker.setLatLng(newLatLng);
-                    }
-                }, interval);
-            }
-
-            function searchMarkerByPlate(plate) {
-                const tricycle = markerData.find(tricycle => tricycle.plate_number.toLowerCase().trim().includes(plate.toLowerCase().trim()));
-                if (tricycle) {
-                    view_map.setView([tricycle.lat, tricycle.lng], 15);
-
-                    const marker = markers.find(marker => marker.marker.getLatLng && marker.marker.getLatLng().lat === tricycle.lat && marker.marker.getLatLng().lng === tricycle.lng);
-                    if (marker) {
-                        marker.marker.openTooltip();
-                    }
-                }
             }
         </script>
     @endpush

@@ -18,7 +18,7 @@ class LocationTracker extends Component
         }
 
         if ($tricycle_id) {
-            $tricycles->where('id', $tricycle_id);
+            $tricycles->where('tricycle_id', $tricycle_id); // fixed column
         }
 
         return $tricycles->get()->map(function ($tricycle) {
@@ -51,6 +51,7 @@ class LocationTracker extends Component
             ];
         });
     }
+
     public function render()
     {
         return view('livewire.tracking.location-tracker');
