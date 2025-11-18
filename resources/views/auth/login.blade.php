@@ -7,12 +7,12 @@
         <div class="login-wrapper login-new">
             <div class="container">
                 <div class="login-content user-login">
-                    <div class="login-logo">
+                    {{-- <div class="login-logo">
                         <img src="" alt="img">
                         <a href="index.html" class="login-logo logo-white">
                             <img src="img/logo.png" alt="">
                         </a>
-                    </div>
+                    </div> --}}
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="login-userset">

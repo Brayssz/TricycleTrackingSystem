@@ -15,6 +15,7 @@ class Device extends Model
         'device_name',
         'device_identifier',
         'status',
+        'sim_number',
     ];
 
     public function coordinates()

@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
     <meta name="keywords"
-        content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern,  html5, responsive" />
+        content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, html5, responsive" />
     <meta name="robots" content="noindex, nofollow" />
     <title>@yield('title', 'Tricycle Tracking')</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ asset('') }}" type="image/x-icon" />
+    <!-- Disable Favicon -->
+    <link rel="icon" href="data:,">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
@@ -28,23 +28,24 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.3.3/css/bootstrap-datetimepicker.min.css">
 
-    <!-- Toatr CSS -->
+    <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
+    <!-- Leaflet Routing / Geocoder CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <!-- Daterangepicker CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17/dist/sweetalert2.min.css">
+
+    <!-- Tippy Tooltip CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+
+    <!-- Vite Compiled Styles -->
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
-    {{-- @livewireStyles<!-- Styles - --}}
-
-
 </head>
 
 <body>
@@ -142,8 +143,6 @@
                                 </div>
                             </div>
                             <hr class="m-0" />
-                            <a class="dropdown-item" href="/profile">
-                                <i class="me-2" data-feather="user"></i> My Profile</a>
                             <a href="#" class="dropdown-item logout pb-0"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <img src="img/icons/log-out.svg" class="me-2" alt="img" />Logout

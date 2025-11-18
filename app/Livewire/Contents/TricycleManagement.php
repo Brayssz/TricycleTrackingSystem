@@ -40,13 +40,21 @@ class TricycleManagement extends Component
                 'max:255',
                 Rule::unique('tricycles', 'plate_number')->ignore($this->tricycle_id, 'tricycle_id'),
             ],
+
             'motorcycle_model' => 'required|string|max:255',
             'color' => 'required|string|max:255',
             'driver_id' => 'nullable|integer|exists:drivers,driver_id',
             'status' => 'nullable|string|max:255',
-            'device_id' => 'nullable|string|max:255',
+
+            // Prevent duplicate device assignments
+            'device_id' => [
+                'nullable',
+                'integer',
+                Rule::unique('tricycles', 'device_id')->ignore($this->tricycle_id, 'tricycle_id'),
+            ],
         ];
     }
+
 
     public function render()
     {
@@ -56,7 +64,12 @@ class TricycleManagement extends Component
     public function resetFields()
     {
         $this->reset([
-            'plate_number', 'motorcycle_model', 'color', 'driver_id', 'status', 'device_id'
+            'plate_number',
+            'motorcycle_model',
+            'color',
+            'driver_id',
+            'status',
+            'device_id'
         ]);
     }
 

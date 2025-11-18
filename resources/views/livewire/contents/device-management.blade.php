@@ -48,6 +48,16 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="sim_number">SIM Number</label>
+                                                    <input type="text" class="form-control" placeholder="Enter SIM number"
+                                                        id="sim_number" wire:model.lazy="sim_number">
+                                                    @error('sim_number')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
                                             @if ($submit_func == 'edit-device')
                                                 <div class="col-lg-6 col-md-6">
                                                     <div class="mb-3">
