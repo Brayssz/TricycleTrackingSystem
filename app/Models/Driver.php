@@ -18,7 +18,6 @@ class Driver extends Model
         'address',
         'status',
         'username',
-        'password',
     ];
 
     public function tricycles()

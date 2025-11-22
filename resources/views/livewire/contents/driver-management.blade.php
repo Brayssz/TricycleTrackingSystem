@@ -97,7 +97,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="pass-info">
+                                        {{-- <div class="pass-info">
                                             <div class="card-title-head" wire:ignore>
                                                 <h6>
                                                     <span><i data-feather="info" class="feather-edit"></i></span>
@@ -131,7 +131,7 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
