@@ -183,14 +183,15 @@
                     "newestOnTop": true,
                     "progressBar": true,
                     "positionClass": "toast-bottom-right",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
+                    "timeOut": "20000", // 20 seconds
+                    "extendedTimeOut": "20000", // 20 seconds if hovered
                     "showMethod": "fadeIn",
                     "hideMethod": "fadeOut"
                 };
 
                 toastr.warning(`⚠ TRICYCLE ${plateNumber} LEFT KORONADAL CITY!`, "Tricycle Alert");
             }
+
 
 
             function createMarker(map, tricycle) {
