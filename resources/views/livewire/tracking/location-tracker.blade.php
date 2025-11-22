@@ -16,8 +16,8 @@
                 let currentPlateSearch = "";
 
                 setInterval(() => {
-                   
-                getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, false);
+
+                    getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, false);
                 }, 1000);
 
                 view_map = initMap();
@@ -146,6 +146,7 @@
 
                     if (outside) {
                         console.warn(`⚠ TRICYCLE ${tricycle.plate_number} LEFT KORONADAL CITY!`);
+                        notifyTricycle(tricycle.plate_number);
                         @this.call('logOutside', tricycle.tricycle_id, tricycle.driver_id, tricycle.lat, tricycle.lng)
                         // You may trigger sound, send to Livewire, or show alert
                     }
@@ -156,6 +157,41 @@
                 }
 
             }
+
+            const notifiedTricycles = new Set();
+
+            function notifyTricycle(plateNumber) {
+                // Only notify if this plate number hasn't been notified yet
+                if (notifiedTricycles.has(plateNumber)) return;
+
+                notifiedTricycles.add(plateNumber);
+
+                // Play a default beep using Web Audio API
+                const context = new(window.AudioContext || window.webkitAudioContext)();
+                const o = context.createOscillator();
+                const g = context.createGain();
+                o.type = 'sine';
+                o.frequency.value = 440; // frequency in Hz
+                o.connect(g);
+                g.connect(context.destination);
+                o.start();
+                o.stop(context.currentTime + 0.2);
+
+                // Show Toastr notification
+                toastr.options = {
+                    "closeButton": true,
+                    "newestOnTop": true,
+                    "progressBar": true,
+                    "positionClass": "toast-bottom-right",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+
+                toastr.warning(`⚠ TRICYCLE ${plateNumber} LEFT KORONADAL CITY!`, "Tricycle Alert");
+            }
+
 
             function createMarker(map, tricycle) {
                 const initials = tricycle.plate_number.split(' ')

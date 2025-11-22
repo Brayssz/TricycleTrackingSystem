@@ -12,18 +12,18 @@ class BoundaryLogController extends Controller
     {
         if ($request->ajax()) {
 
-            // Get latest log for each tricycle
+            // Get the latest log for each tricycle
             $latestLogs = TricycleOutOfBoundaryLog::with(['tricycle', 'driver'])
-                ->select('tricycle_id', DB::raw('MAX(detected_at) as latest_detected_at'))
-                ->groupBy('tricycle_id');
-
-            $query = TricycleOutOfBoundaryLog::with(['tricycle', 'driver'])
-                ->joinSub($latestLogs, 'latest_logs', function ($join) {
-                    $join->on('tricycle_out_of_boundary_logs.tricycle_id', '=', 'latest_logs.tricycle_id')
-                        ->on('tricycle_out_of_boundary_logs.detected_at', '=', 'latest_logs.latest_detected_at');
+                ->select('tricycle_out_of_boundary_logs.*')
+                ->whereIn('log_id', function ($query) {
+                    $query->select(DB::raw('MAX(log_id)'))
+                        ->from('tricycle_out_of_boundary_logs')
+                        ->groupBy('tricycle_id');
                 });
 
-            // Optional search by plate number or driver name
+            $query = $latestLogs;
+
+            // Optional search
             if ($request->filled('search') && !empty($request->input('search')['value'])) {
                 $search = $request->input('search')['value'];
                 $query->whereHas('tricycle', function ($q) use ($search) {
