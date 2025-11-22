@@ -36,9 +36,6 @@ class DriverManagement extends Component
 
     protected function rules()
     {
-         $passwordRules = $this->driver_id
-            ? 'nullable|string|min:8|confirmed'
-            : 'required|string|min:8|confirmed';
         return [
             'name' => 'required|string|max:255',
             'license_number' => [
@@ -50,8 +47,7 @@ class DriverManagement extends Component
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'status' => 'nullable|string|max:255',
-            'username' => 'required|string|max:255|unique:drivers,username,' . $this->driver_id . ',driver_id',
-            'password' => $passwordRules,
+            'username' => 'required|string|max:255|unique:drivers,username,' . $this->driver_id . ',driver_id'
         ];
     }
 
