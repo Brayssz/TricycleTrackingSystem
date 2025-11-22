@@ -24,4 +24,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('tricycles', [TricycleController::class, 'show'])->name('tricycles');
     Route::get('devices', [DeviceController::class, 'show'])->name('devices');
     Route::get('locations', [LocationController::class, 'tricyclesWithLatestUpdate']);
+    Route::get('/out-of-boundary-logs', [App\Http\Controllers\BoundaryLogController::class, 'show']);
+
 });

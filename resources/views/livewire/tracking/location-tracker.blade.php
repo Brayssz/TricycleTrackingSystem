@@ -4,6 +4,8 @@
             let view_map;
             let markers = [];
             let markerData = [];
+            let koronadalPolygon = null;
+
 
             $(document).ready(function() {
                 initializeSelect2();
@@ -13,11 +15,10 @@
                 let currentTricycleId = null;
                 let currentPlateSearch = "";
 
-                // Fetch locations periodically
-                // setInterval(() => {
-                //     getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch);
-                // }, 1000);
+                setInterval(() => {
+                   
                 getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, false);
+                }, 1000);
 
                 view_map = initMap();
 
@@ -42,6 +43,19 @@
                     getTricycleLocations(currentDriverId, currentTricycleId, currentPlateSearch, true);
                 });
             });
+
+            const koronadalBoundary = [
+                [6.40, 124.78],
+                [6.40, 124.97],
+                [6.60, 124.97],
+                [6.60, 124.78],
+                [6.40, 124.78]
+            ];
+
+            function isOutsideKoronadal(lat, lng) {
+                const point = L.latLng(lat, lng);
+                return !koronadalPolygon.getBounds().contains(point);
+            }
 
             function focusFirstMarker() {
                 console.log(markerData);
@@ -90,6 +104,11 @@
                     map.setView(latlng, 11);
                 }).addTo(map);
 
+                koronadalPolygon = L.polygon(koronadalBoundary, {
+                    color: "green",
+                    fillOpacity: 0.05
+                });
+
                 return map;
             }
 
@@ -108,6 +127,9 @@
 
                 tricycles.forEach(tricycle => {
                     const newMarker = createMarker(map, tricycle);
+
+                    const outside = isOutsideKoronadal(tricycle.lat, tricycle.lng);
+
                     markers.push({
                         tricycleId: tricycle.plate_number,
                         marker: newMarker
@@ -121,9 +143,15 @@
                         fillOpacity: 0.2,
                         radius: 200
                     }).addTo(map);
+
+                    if (outside) {
+                        console.warn(`⚠ TRICYCLE ${tricycle.plate_number} LEFT KORONADAL CITY!`);
+                        @this.call('logOutside', tricycle.tricycle_id, tricycle.driver_id, tricycle.lat, tricycle.lng)
+                        // You may trigger sound, send to Livewire, or show alert
+                    }
                 });
 
-                if(isfiltered) {
+                if (isfiltered) {
                     focusFirstMarker();
                 }
 

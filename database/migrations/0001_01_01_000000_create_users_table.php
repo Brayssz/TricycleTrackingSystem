@@ -92,6 +92,34 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('tricycle_out_of_boundary_logs', function (Blueprint $table) {
+            $table->id('log_id');
+
+            $table->unsignedBigInteger('tricycle_id')->nullable();
+
+            $table->unsignedBigInteger('driver_id')->nullable();
+
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
+
+            $table->string('status')->default('outside');
+            $table->text('note')->nullable();
+
+            $table->timestamp('detected_at')->useCurrent();
+
+            $table->timestamps();
+
+            $table->foreign('tricycle_id')
+                ->references('tricycle_id')
+                ->on('tricycles')
+                ->onDelete('set null');
+
+            $table->foreign('driver_id')
+                ->references('driver_id')
+                ->on('drivers')
+                ->onDelete('set null');
+        });
     }
 
     /**
@@ -102,5 +130,10 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('device_coordinates');
+        Schema::dropIfExists('tricycles');
+        Schema::dropIfExists('devices');
+        Schema::dropIfExists('drivers');
+        Schema::dropIfExists('tricycle_out_of_boundary_logs');
     }
 };

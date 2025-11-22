@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
             [
                 'device_name' => 'Tracker 02',
                 'sim_number' => 'SIM0987654321',
-                'device_identifier' => 'DEV-002',
+                'device_identifier' => 'gps-002',
                 'status' => 'active',
                 'created_at' => $now,
                 'updated_at' => $now,

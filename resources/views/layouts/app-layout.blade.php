@@ -146,7 +146,7 @@
                             <a href="#" class="dropdown-item logout pb-0"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <img src="img/icons/log-out.svg" class="me-2" alt="img" />Logout
-                            </a>
+                            </a>    
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                 style="display: none;">

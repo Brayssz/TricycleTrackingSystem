@@ -48,7 +48,30 @@
 
         </div>
 
-        <div class="row">
+        <div class="row px-2">
+
+            <div class="card table-list-card mt-2">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Tricycles Outside Koronadal</h4>
+                </div>
+
+                <div class="card-body pb-0">
+                    <div class="table-responsive">
+                        <table class="table out-boundary-table pb-3">
+                            <thead>
+                                <tr>
+                                    <th>Plate Number</th>
+                                    <th>Driver</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                    <th>Last Seen </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <div class="card flex-fill default-cover mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -82,7 +105,7 @@
                                 </select>
                             </div>
                         </div>
-                     
+
                         <!-- Required JS/CSS for daterangepicker -->
 
                     </div>
@@ -94,6 +117,73 @@
 @endsection
 @push('scripts')
     <script>
+        $(document).ready(function() {
+
+            // Initialize Out-of-boundary DataTable
+            let outBoundaryTable = null;
+
+            function loadOutBoundaryTable() {
+                if ($('.out-boundary-table').length > 0) {
+                    if (outBoundaryTable) {
+                        outBoundaryTable.ajax.reload(null, false); // reload without resetting pagination
+                        return;
+                    }
+
+                    outBoundaryTable = $('.out-boundary-table').DataTable({
+                        processing: true,
+                        serverSide: true,
+                        bFilter: false,
+                        sDom: 'fBtlpi',
+                        pagingType: 'numbers',
+                        ordering: true,
+                        order: [
+                            [4, 'desc']
+                        ],
+                        language: {
+                            search: ' ',
+                            sLengthMenu: '_MENU_',
+                            searchPlaceholder: "Search...",
+                            info: "_START_ - _END_ of _TOTAL_ items",
+                        },
+                        ajax: {
+                            url: '/out-of-boundary-logs',
+                            type: 'GET',
+                            headers: {
+                                Accept: 'application/json'
+                            },
+                            dataSrc: 'data'
+                        },
+                        columns: [{
+                                data: 'plate_number'
+                            },
+                            {
+                                data: 'driver_name'
+                            },
+                            {
+                                data: 'latitude'
+                            },
+                            {
+                                data: 'longitude'
+                            },
+                            {
+                                data: 'last_seen'
+                            } // human-readable "ago"
+                        ],
+                        drawCallback: function(settings) {
+                            feather.replace();
+                        },
+                    });
+                }
+            }
+
+            // Initial load
+            loadOutBoundaryTable();
+
+            // Auto-refresh every 10 seconds
+            setInterval(() => {
+                loadOutBoundaryTable();
+            }, 10000); // 10000 ms = 10 sec
+        });
         $(function() {
             function setDateTime(val) {
                 $('#exactdatetime').val(val ? val : '');

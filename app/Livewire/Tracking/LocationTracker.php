@@ -4,6 +4,7 @@ namespace App\Livewire\Tracking;
 
 use Livewire\Component;
 use App\Models\Tricycle;
+use App\Models\TricycleOutOfBoundaryLog;
 
 class LocationTracker extends Component
 {
@@ -42,6 +43,8 @@ class LocationTracker extends Component
             }
 
             return [
+                'tricycle_id' => $tricycle->tricycle_id,
+                'driver_id' => $tricycle->driver_id,
                 'plate_number' => $tricycle->plate_number,
                 'driver_name' => $tricycle->driver->name ?? null,
                 'lat' => $latestCoordinate->latitude ?? null,
@@ -51,6 +54,21 @@ class LocationTracker extends Component
             ];
         });
     }
+
+    public function logOutside($tricycleId, $driverId, $lat, $lng)
+    {
+        TricycleOutOfBoundaryLog::create([
+            'tricycle_id' => $tricycleId,
+            'driver_id' => $driverId,
+            'latitude' => $lat,
+            'longitude' => $lng,
+            'status' => 'outside',
+            'note' => 'Detected outside Koronadal boundary',
+            'detected_at' => now(),
+        ]);
+    }
+
+
 
     public function render()
     {
