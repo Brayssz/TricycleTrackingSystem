@@ -111,8 +111,14 @@
                         <span class="user-info">
                             <span class="user-letter">
                                 <span class="avatar avatar bg-success h-100">
-                                    <span
-                                        class="avatar-title">{{ strtoupper(substr(Auth::user()->name, 0, 1)) . strtoupper(substr(explode(' ', Auth::user()->name)[1], 0, 1)) }}</span>
+                                    @php
+                                        $name = Auth::user()->name;
+                                        $parts = explode(' ', $name);
+                                        $firstLetter = strtoupper(substr($parts[0], 0, 1));
+                                        $secondLetter = isset($parts[1]) ? strtoupper(substr($parts[1], 0, 1)) : '';
+                                    @endphp
+
+                                    <span class="avatar-title">{{ $firstLetter . $secondLetter }}</span>
                                 </span>
                             </span>
                             <span class="user-detail">
@@ -146,7 +152,7 @@
                             <a href="#" class="dropdown-item logout pb-0"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <img src="img/icons/log-out.svg" class="me-2" alt="img" />Logout
-                            </a>    
+                            </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                 style="display: none;">

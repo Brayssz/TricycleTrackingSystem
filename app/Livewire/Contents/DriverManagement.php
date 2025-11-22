@@ -14,7 +14,7 @@ class DriverManagement extends Component
     public $driver;
 
     public $driver_id, $name, $license_number, $phone, $address, $status;
-    public $username, $password, $password_confirmation;
+    public $username;
 
     public function getDriver($driverId)
     {
@@ -63,7 +63,7 @@ class DriverManagement extends Component
     public function resetFields()
     {
         $this->reset([
-            'name', 'license_number', 'phone', 'address', 'status', 'username', 'password', 'password_confirmation'
+            'name', 'license_number', 'phone', 'address', 'status', 'username'
         ]);
     }
 
@@ -79,7 +79,6 @@ class DriverManagement extends Component
                 'address' => $this->address,
                 'status' => $this->status ?? 'active',
                 'username' => $this->username,
-                'password' => Hash::make($this->password),
             ]);
 
             session()->flash('message', 'Driver successfully created.');
@@ -90,10 +89,6 @@ class DriverManagement extends Component
             $this->driver->address = $this->address;
             $this->driver->status = $this->status;
             $this->driver->username = $this->username;
-
-            if ($this->password) {
-                $this->driver->password = Hash::make($this->password);
-            }
 
             $this->driver->save();
 
