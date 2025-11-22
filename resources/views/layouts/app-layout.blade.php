@@ -135,8 +135,14 @@
                             <div class="profileset">
                                 <span class="user-img">
                                     <span class="avatar avatar-md bg-success">
-                                        <span
-                                            class="avatar-title">{{ strtoupper(substr(Auth::user()->name, 0, 1)) . strtoupper(substr(explode(' ', Auth::user()->name)[1], 0, 1)) }}</span>
+                                        @php
+                                            $name = Auth::user()->name;
+                                            $parts = explode(' ', $name);
+                                            $firstLetter = strtoupper(substr($parts[0], 0, 1));
+                                            $secondLetter = isset($parts[1]) ? strtoupper(substr($parts[1], 0, 1)) : '';
+                                        @endphp
+
+                                        <span class="avatar-title">{{ $firstLetter . $secondLetter }}</span>
                                     </span>
 
                                     <span class="status online"></span>
